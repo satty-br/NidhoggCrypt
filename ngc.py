@@ -44,12 +44,13 @@ def upload_file():
     if cs == None:
         return jsonify({"message": "Realy?"}), 500
     try:
+        folder_path = os.path.join("uploads", cid, id)
+        os.makedirs(folder_path, exist_ok=True)
+        path = os.path.join(folder_path, name)
         cs.decrypt_file(file).save(path)
     except Exception as e:
         return jsonify({"message": "Realy?"}), 500
-    folder_path = os.path.join("uploads", cid, id)
-    os.makedirs(folder_path, exist_ok=True)
-    path = os.path.join(folder_path, name)
+
     print("Arquivo baixado:")
     print(path)
     local_queue.add_message(cid, {"id":id,"typ":"file","loc":path})
