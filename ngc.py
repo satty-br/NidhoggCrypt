@@ -1,5 +1,3 @@
-
-import json
 import threading
 import time
 from urllib.parse import urlparse
@@ -44,7 +42,7 @@ def upload_file():
     for client in clients:
         if client["cid"] == cid:
             cs = client["cs"]
-    if cs == None:
+    if not cs:
         return jsonify({"message": "Realy?"}), 500
     try:
         folder_path = os.path.join("uploads", cid, id)
@@ -79,7 +77,7 @@ def handle_error():
     for client in clients:
         if client["cid"] == cid:
             cs = client["cs"]
-    if cs == None:
+    if not cs:
         return jsonify({"message": "Realy?"}), 500
 
     ret = cs.decrypt_context(request.form.get('output'))
@@ -148,7 +146,7 @@ def process_commands():
         cli = None
         try:
             cli = clients[int(command)]
-        except Exception as e:
+        except Exception:
             print("invalid client")
         if cli:
             print(
