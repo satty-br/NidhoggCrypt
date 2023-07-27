@@ -1,5 +1,7 @@
 from collections import defaultdict, deque
 import uuid
+
+
 class MessageQueue:
     def __init__(self):
         self.messages_by_client = defaultdict(deque)

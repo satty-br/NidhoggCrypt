@@ -4,21 +4,24 @@ import cryptography.hazmat.primitives.hashes as hashes
 import cryptography.hazmat.primitives.asymmetric.ec as ec
 import cryptography.hazmat.primitives.serialization as serialization
 
+
 class Ecrypt:
 
-    def __init__(self, isServer=False, private_key = None, private_pass= None, public_key= None):
+    def __init__(self, isServer=False, private_key=None, private_pass=None, public_key=None):
         if isServer:
             if private_key != None:
-                self.private_key = Ecrypt.load_private_key_pem(private_key,private_pass)
+                self.private_key = Ecrypt.load_private_key_pem(
+                    private_key, private_pass)
                 self.public_key = self.private_key.public_key()
             else:
-                self.private_key, self.public_key = Ecrypt.generate_key_pair(self)
+                self.private_key, self.public_key = Ecrypt.generate_key_pair(
+                    self)
         else:
             self.public_key = public_key
 
-    def set_public_key(self,pkey):
+    def set_public_key(self, pkey):
         self.public_key = pkey
-    
+
     def get_public_key(self):
         return self.public_key
 
@@ -39,13 +42,13 @@ class Ecrypt:
     def encrypt_file(self, file):
         with open(file, 'rb') as file:
             plaintext_content = file.read()
-            return self.encrypt_content(plaintext_content) 
-        
+            return self.encrypt_content(plaintext_content)
+
     def decrypt_file(self, file):
         plaintext_content = file.read()
         return self.decrypt_context(plaintext_content)
 
-    def decrypt_context(self,ciphertext):
+    def decrypt_context(self, ciphertext):
         plaintext = self.private_key.decrypt(
             ciphertext,
             ec.ECIES(hashes.SHA256())
