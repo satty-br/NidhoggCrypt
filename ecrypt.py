@@ -1,4 +1,3 @@
-import os
 import tempfile
 import cryptography.hazmat.primitives.hashes as hashes
 import cryptography.hazmat.primitives.asymmetric.ec as ec
@@ -9,7 +8,7 @@ class Ecrypt:
 
     def __init__(self, isServer=False, private_key=None, private_pass=None, public_key=None):
         if isServer:
-            if private_key != None:
+            if private_key:
                 self.private_key = Ecrypt.load_private_key_pem(
                     private_key, private_pass)
                 self.public_key = self.private_key.public_key()

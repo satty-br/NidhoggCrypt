@@ -66,25 +66,7 @@ def handle_error():
 
     local_queue.add_message(cid, {"id": id, "typ": "erro", "msg": ret})
     print(ret)
-    return jsonify({"message": f"Erro recebido: {ret}"}), 200
-
-
-@app.route('/error', methods=['POST'])
-def handle_error():
-    id = request.form.get('id')
-    cid = request.form.get('cid')
-    cs = None
-    for client in clients:
-        if client["cid"] == cid:
-            cs = client["cs"]
-    if not cs:
-        return jsonify({"message": "Realy?"}), 500
-
-    ret = cs.decrypt_context(request.form.get('output'))
-
-    local_queue.add_message(cid, {"id": id, "typ": "ret", "msg": ret})
-    print(ret)
-    return jsonify({"message": f"Erro recebido: {ret}"}), 200
+    return jsonify({"message": f"Erro recebido: {id}"}), 200
 
 
 @app.route('/add_message', methods=['POST'])
