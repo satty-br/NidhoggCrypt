@@ -7,7 +7,7 @@ class MessageQueue:
         self.messages_by_client = defaultdict(deque)
 
     def add_message(self, cid, message):
-        message[id] = str(uuid.uuid4())
+        message["id"] = str(uuid.uuid4())
         self.messages_by_client[cid].append(message)
 
     def get_next_message(self, cid):
