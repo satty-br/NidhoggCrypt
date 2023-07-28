@@ -1,6 +1,6 @@
 # NidhoggCrypt Readme
 
-NidhoggCrypt is a powerful and secure remote reverse shell project inspired by the legendary creature from Norse mythology, Nidhogg. The project focuses on enabling encrypted file downloads through HTTP transmission, ensuring data privacy and protection during transfer.
+NidhoggCrypt is a powerful and secure http remote reverse shell project inspired by the legendary creature from Norse mythology, Nidhogg. The project focuses on enabling encrypted file downloads through HTTP transmission, ensuring data privacy and protection during transfer.
 
 ## Features:
 
