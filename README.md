@@ -2,6 +2,40 @@
 
 NidhoggCrypt is a powerful and secure http remote reverse shell project inspired by the legendary creature from Norse mythology, Nidhogg. The project focuses on enabling encrypted file downloads through HTTP transmission, ensuring data privacy and protection during transfer.
 
+## Explain
+
+
+```
+                    +----------------+                 +---------+
++---------+         |                |                 |         |
+| Python  | Console |                |       +---------+   HTTP  |
+| Console +-------->+   Reverse      |       |         |  Client |
+|         |         |    server      |       |         |         |
++---------+         |    Python      |       |         +---------+
+                    |                |       |
+                    |                |       |         +---------+ 
+                    |                |  HTTP |         |         |
+                    |                <-----------------+  HTTP   |
++---------+         |                |       |         |  Client |
+|         |         |                |       |         |         |
+| HTTP    |   HTTP  |                |       |         +---------+
+| API     +-------->+                |       |         
+|         |         |                |       |
++---------+         |                |       |
+                    +----------------+       |         +---------+
+                                             |         |         |
+                                             |         |   HTTP  |
+                                             +---------+  Client |
+                                                       |         |
+                                                       +---------+
+
+```
+
+
+
+
+
+
 ## Features:
 
 Remote Reverse Shell: NidhoggCrypt provides a fully functional reverse shell that allows remote access to a target system.
