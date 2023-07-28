@@ -32,10 +32,17 @@ jobs:
         pyinstaller --onefile ngc.py
         pyinstaller --onefile cli_ngc.py
         # Adicione outros comandos de build se necessário.
-
+    
+    - name: 'Get Previous tag'
+      id: previous_tag
+      uses: "WyriHaximus/github-action-get-previous-tag@v1"
+      with:
+        fallback: 1.0.0
+        
     - name: Upload to Releases
       uses: softprops/action-gh-release@v1
       with:
+        tag_name: ${{steps.previous_tag.outputs.tag}}
         files: |
           dist/ngc.exe  # Caminho para o executável do Windows
           dist/cli_ngc.exe  # Caminho para o executável do Windows CLI
