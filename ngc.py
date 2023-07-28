@@ -46,10 +46,11 @@ def receive_cmd():
             cs = client["cs"]
     if not cs:
         return {"message": "Realy?"}, 500
-    ret=cs.decrypt(cmd)
+    ret = cs.decrypt(cmd)
     print(f"Return from cid:{cid}-id:{id}")
     print(ret)
-    return {"ok":"ok"},200
+    return {"ok": "ok"}, 200
+
 
 @app.route('/upload', methods=['POST'])
 def upload_file():
@@ -77,7 +78,6 @@ def upload_file():
     return {"message": "Upload realizado com sucesso."}, 200
 
 
-
 @app.route('/error', methods=['POST'])
 def handle_error():
     id = request.form.get('id')
@@ -102,7 +102,7 @@ def add_message():
 def get_next_message(user_id):
     message = message_queue.get_next_message(user_id)
     if message:
-        return  {"message": message}
+        return {"message": message}
     else:
         return {"status": f"No more messages for user with ID {str(user_id)}"}
 
@@ -151,9 +151,11 @@ def process_commands():
         except Exception:
             print("invalid client")
         if cli:
-            print("To perform a download:") 
-            print("'dl url method=POST/GET headers={Authorization: Bearer ehauehasuhsad} data={variable:value}'.")
-            print("To start 'dl' for download or enter a command if you want to send an HTTP request.")
+            print("To perform a download:")
+            print(
+                "'dl url method=POST/GET headers={Authorization: Bearer ehauehasuhsad} data={variable:value}'.")
+            print(
+                "To start 'dl' for download or enter a command if you want to send an HTTP request.")
             print("To download a file, use 'filedl file_path'.")
             print("To execute a command on the client, enter the command.")
             print("Or type 'qq' to return to the list of clients.")
@@ -187,4 +189,3 @@ if __name__ == '__main__':
     log = logging.getLogger('werkzeug')
     log.setLevel(logging.ERROR)
     main()
-

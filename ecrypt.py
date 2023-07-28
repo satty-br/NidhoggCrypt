@@ -4,7 +4,8 @@ from typing import AnyStr
 import cryptography.hazmat.primitives.hashes as hashes
 import cryptography.hazmat.primitives.serialization as serialization
 from cryptography.hazmat.backends import default_backend
-from cryptography.hazmat.primitives.asymmetric import rsa,padding
+from cryptography.hazmat.primitives.asymmetric import rsa, padding
+
 
 class Ecrypt:
 
@@ -24,13 +25,13 @@ class Ecrypt:
 
     def load_public_key_from_string(self, public_key_string):
         public_key_data = public_key_string.encode('utf-8')
-        self.public_key =  serialization.load_pem_public_key(public_key_data, backend=default_backend())
-
+        self.public_key = serialization.load_pem_public_key(
+            public_key_data, backend=default_backend())
 
     def public_key_to_string(self):
         if self.public_key is None:
             raise ValueError("Public key has not been generated.")
-        
+
         pem = self.public_key.public_bytes(
             encoding=serialization.Encoding.PEM,
             format=serialization.PublicFormat.SubjectPublicKeyInfo
@@ -48,13 +49,11 @@ class Ecrypt:
         )
         self.public_key = self.private_key.public_key()
 
-
     def want_bytes(self, s: AnyStr) -> bytes:
         """Convert string to bytes."""
         if isinstance(s, str):
             return s.encode()
         return s
-    
 
     def encrypt(self, plaintext):
         if self.public_key is None:
@@ -64,7 +63,7 @@ class Ecrypt:
         encrypted_blocks = []
 
         for i in range(0, len(plaintext), block_size):
-            block = plaintext[i : i + block_size]
+            block = plaintext[i: i + block_size]
             encrypted_block = self.public_key.encrypt(
                 block.encode(),
                 padding.OAEP(
@@ -87,7 +86,7 @@ class Ecrypt:
         decrypted_blocks = []
 
         for i in range(0, len(ciphertext), block_size):
-            encrypted_block = ciphertext[i : i + block_size]
+            encrypted_block = ciphertext[i: i + block_size]
             decrypted_block = self.private_key.decrypt(
                 encrypted_block,
                 padding.OAEP(
@@ -110,8 +109,6 @@ class Ecrypt:
     def decrypt_file(self, file):
         plaintext_content = file.read()
         return self.decrypt(plaintext_content)
-
-
 
     def get_public_key_pem(self):
         return self.public_key.public_bytes(
