@@ -113,7 +113,10 @@ def is_http_url(url):
 
 
 def parse_dl_string(data_string):
-    pattern = r'dl\s+(?P<url>\S+)\s+method=(?P<method>POST|GET)\s+headers=\'\{(?P<headers>[^}]*)\}\'\s+data=\'\{(?P<data>[^}]*)\}\''
+    pattern = (
+        r'dl\s+(?P<url>\S+)\s+method=(?P<method>POST|GET)\s+'
+        r'headers=\'\{(?P<headers>[^}]*)\}\'\s+data=\'\{(?P<data>[^}]*)\}\''
+    )
     match = re.match(pattern, data_string)
 
     if match:
