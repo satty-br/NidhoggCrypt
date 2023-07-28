@@ -24,15 +24,13 @@ NidhoggCrypt encrypts the requested files before transferring them via HTTP to t
 
 ## Installation:
 
-To install NidhoggCrypt, follow the instructions in the installation guide provided in the repository.
+clone repo 
 
 Usage:
 
-Launch the NidhoggCrypt reverse shell server, you can interact via console or endpoint.
+Launch the ngc.ppy reverse shell server, you can interact via console or endpoint.
 
-Launch the NidhoggCrypt_cli in target system.
-
-To download files, send the desired file URLs via the established connection.
+Launch the cli_ngc.py in target system.
 
 Security Considerations:
 
@@ -42,15 +40,11 @@ Disclaimer:
 NidhoggCrypt is an open-source project provided as-is, without any warranty or guarantee of its performance or security. The developers are not responsible for any misuse or damage caused by the use of this tool.
 
 Contributing:
-
 We welcome contributions from the open-source community to enhance and improve NidhoggCrypt. Please refer to the contribution guidelines in the repository for more information.
 
 License:
-
-NidhoggCrypt is licensed under the [License Name] license. Refer to the LICENSE file for more details.
+NidhoggCrypt is licensed under the MIT license. Refer to the LICENSE file for more details.
 
 Contact:
-
 For any questions, feedback, or support, please contact us at satty@satty.com.br.
-
-Thank you for using NidhoggCrypt! We hope it serves your needs for secure file transfers and remote access.
+Thank you for using NidhoggCrypt! 
