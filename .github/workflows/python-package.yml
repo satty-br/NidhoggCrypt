@@ -43,9 +43,8 @@ jobs:
       with:
         tag_name: ${{steps.previous_tag.outputs.tag}}
         files: |
-          dist/ngc.exe
-          dist/cli_ngc.exe
-          dist/ngc
-          dist/cli_ngc
-
+          NidhoggCrypt/NidhoggCrypt
+          NidhoggCryptCli/NidhoggCryptCli
+          NidhoggCrypt/NidhoggCrypt.exe
+          NidhoggCryptCli/NidhoggCryptCli.exe
         token: ${{ secrets.GITHUB_TOKEN }}
