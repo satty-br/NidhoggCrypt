@@ -15,7 +15,7 @@ NidhoggCrypt is a powerful and secure http remote reverse shell project inspired
                     |                |       |
                     |                |       |         +---------+ 
                     |                |  HTTP |         |         |
-                    |                <-----------------+  HTTP   |
+                    |                +<------+---------+  HTTP   |
 +---------+         |                |       |         |  Client |
 |         |         |                |       |         |         |
 | HTTP    |   HTTP  |                |       |         +---------+
