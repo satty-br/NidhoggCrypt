@@ -1,5 +1,6 @@
 from collections import defaultdict, deque
 
+
 class ResponseQueue:
     def __init__(self):
         self.messages_by_client = defaultdict(deque)
