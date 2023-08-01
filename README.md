@@ -36,6 +36,7 @@ NidhoggCrypt is a powerful and secure http remote reverse shell project inspired
 
 
 
+
 ## Features:
 
 Remote Reverse Shell: NidhoggCrypt provides a fully functional reverse shell that allows remote access to a target system.
